@@ -13,18 +13,18 @@
 ```shell
 # install
 wget https://raw.githubusercontent.com/pmanstet/misc/refs/heads/main/cmake/cmakeenv && chmod +x cmakeenv
-./cmakeenv 3.31 5 linux-x86_64 .cmake331
+./cmakeenv 3.31 5 linux-x86_64 .cmake3315
 
 # enable
-source .cmake331/bin/activate
+source .cmake3315/bin/activate
 which cmake
 cmake --version
 
 # disable
-source .cmake331/bin/deactivate
+source .cmake3315/bin/deactivate
 which cmake
 cmake --version
 
 # uninstall
-rm -rf .cmakeenv
+rm -rf .cmake3315
 ```
