@@ -6,7 +6,7 @@
 - Bash or compatible shell
 - `wget`
 - `tar`
-- work for CMake versions > 3.20
+- for CMake versions > 3.20 only
 
 ## Usage/Demo 
 
@@ -17,4 +17,5 @@ source .cmake331/bin/activate
 which cmake
 source .cmake331/bin/deactivate
 which cmake
+rm -rf .cmakeenv
 ```
