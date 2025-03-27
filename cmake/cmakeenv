@@ -1,0 +1,54 @@
+#!/bin/bash
+
+set -euo pipefail 
+
+if [ $# -eq 0 ]; then
+cat <<EOF
+install:
+    wget https://raw.githubusercontent.com/pmanstet/misc/refs/heads/main/cmake/cmakeenv && chmod +x cmakeenv
+
+usage:
+    $0 major_minor [patch] [arch] [envdir]
+
+defaults:
+   - patch: 0
+   - arch: linux-x86_64
+   - envdir: .cmakeenv (relative path)
+
+examples:
+    $0 3.31 6 linux-x86_64 .cmakeenv
+    $0 4.0 0-rc5 linux-x86_64 .cmake4
+
+activate/deactivate (for envdir=.cmakeenv):
+    source .cmakeenv/bin/activate
+    source .cmakeenv/bin/deactivate 
+EOF
+exit 1
+fi
+
+major_minor=$1
+patch=${2:-0}
+arch=${3:-linux-x86_64}
+envdir=${4:-.cmakeenv}
+filename=cmake-${major_minor}.${patch}-${arch}
+bindir="$(pwd)/${envdir}/bin"
+
+cat <<EOF
+    $0 ${major_minor} ${patch} ${arch} ${envdir}           
+EOF
+
+wget -q --show-progress http://www.cmake.org/files/v${major_minor}/${filename}.tar.gz 
+tar xf ${filename}.tar.gz --one-top-level="${envdir}" --strip-components 1
+rm ${filename}.tar.gz
+
+cat >"${bindir}/activate" <<EOL
+export PATH="${bindir}:\$PATH"
+EOL
+
+cat >"${bindir}/deactivate" <<EOL
+PATH=":\$PATH:"
+PATH=\${PATH//":"/"::"}
+PATH=\${PATH//":${bindir}:"/}
+PATH=\${PATH//"::"/":"}
+PATH=\${PATH#:}; PATH=\${PATH%:}
+EOL
